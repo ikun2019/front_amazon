@@ -1,5 +1,5 @@
 <template>
-  <Tutorial/>
+  <a href="#" class="a-button-buy-again">Buy Now</a>
 </template>
 
 <script>
