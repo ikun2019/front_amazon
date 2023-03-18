@@ -85,13 +85,13 @@
               <div class="a-spacing-top-medium">
                 <label style="margin-bottom: 0px;">Add Photo</label>
                 <div class="a-row a-spacing-top-medium">
-                  <label for="" class="chosefile-button">
+                  <label class="choosefile-button">
                     <i class="fal fa-plus"></i>
                     <input
                       @change="onFileSelected"
                       type="file"
                     >
-                    <p style="margin-top: 0px;">{{ fileName }}</p>
+                    <p style="margin-top: -70px;">{{ fileName }}</p>
                   </label>
                 </div>
               </div>
