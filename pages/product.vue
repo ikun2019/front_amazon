@@ -11,7 +11,10 @@
               <!-- Category -->
               <div class="a-spacing-top-medium">
                 <label>Category</label>
-                <select class="a-select-option">
+                <select
+                  v-model="categoryID"
+                  class="a-select-option"
+                >
                   <option
                     v-for="(category, index) in categories"
                     :key="index"
@@ -24,7 +27,10 @@
               <!-- Owner -->
               <div class="a-spacing-top-medium">
                 <label>Owner</label>
-                <select class="a-select-option">
+                <select
+                  v-model="ownerID"
+                  class="a-select-option"
+                >
                   <option
                     v-for="(owner, index) in owners"
                     :key="index"
@@ -36,17 +42,43 @@
               <!-- Title -->
               <div class="a-spacing-top-medium">
                 <label style="margin-bottom: 0px;">Title</label>
-                <input type="text" class="a-input-text" style="width: 100%;">
+                <input
+                  v-model="title"
+                  type="text"
+                  class="a-input-text"
+                  style="width: 100%;"
+                >
               </div>
               <!-- Price -->
               <div class="a-spacing-top-medium">
                 <label style="margin-bottom: 0px;">Price</label>
-                <input type="number" class="a-input-text" style="width: 100%;">
+                <input
+                  v-model="price"
+                  type="number"
+                  class="a-input-text"
+                  style="width: 100%;"
+                >
               </div>
+
+              <!-- StockQuantity -->
+              <div class="a-spacing-top-medium">
+                <label style="margin-bottom: 0px;">Stock Quantity</label>
+                <input
+                  v-model="stockQuantity"
+                  type="number"
+                  class="a-input-text"
+                  style="width: 100%;"
+                >
+              </div>
+
               <!-- Description -->
               <div class="a-spacing-top-medium">
                 <label style="margin-bottom: 0px;">Description</label>
-                <textarea placeholder="description" style="width: 100%;"></textarea>
+                <textarea
+                  v-model="description"
+                  placeholder="description"
+                  style="width: 100%;"
+                ></textarea>
               </div>
 
               <!-- Photo -->
@@ -55,8 +87,11 @@
                 <div class="a-row a-spacing-top-medium">
                   <label for="" class="chosefile-button">
                     <i class="fal fa-plus"></i>
-                    <input type="file">
-                    <p style="margin-top: 0px;">name of the photo</p>
+                    <input
+                      @change="onFileSelected"
+                      type="file"
+                    >
+                    <p style="margin-top: 0px;">{{ fileName }}</p>
                   </label>
                 </div>
               </div>
@@ -65,7 +100,7 @@
               <div class="a-spacing-top-large">
                 <span class="a-button-register">
                   <span class="a-button-inner">
-                    <span class="a-button-text">Add Product</span>
+                    <span class="a-button-text" @click="onAddProduct">Add Product</span>
                   </span>
                 </span>
               </div>
@@ -96,6 +131,38 @@ export default {
       }
     } catch (err) {
       console.log(err);
+    }
+  },
+  data() {
+    return {
+      categoryID: null,
+      ownerID: null,
+      title: "",
+      price: 0,
+      description: "",
+      selectedFile: null,
+      fileName: "",
+      stockQuantity: 1
+    }
+  },
+  methods: {
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+      console.log(this.selectedFile);
+      this.fileName = event.target.files[0].name;
+    },
+    async onAddProduct() {
+      let data = new FormData();
+      data.append("title", this.title);
+      data.append("price", this.price);
+      data.append("description", this.description);
+      data.append("ownerID", this.ownerID);
+      data.append("categoryID", this.categoryID);
+      data.append("photo", this.selectedFile, this.selectedFile.name);
+      data.append("stockQuantity", this.stockQuantity);
+
+      let result = await this.$axios.$post('http://localhost:8080/api/products', data);
+      this.$router.push('/');
     }
   }
 }
