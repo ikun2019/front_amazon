@@ -54,7 +54,7 @@
               <!-- Product Buttons -->
               <div class="a-row">
                 <nuxt-link :to="`/products/${product.id}`" class="a-button-history margin-right-10">Update</nuxt-link>
-                <nuxt-link to="#" class="a-button-history margin-right-10">Delete</nuxt-link>
+                <a href="#" class="a-button-history margin-right-10" @click="onDeleteProduct(product.id, index)">Delete</a>
               </div>
           </div>
         </div>
@@ -68,12 +68,21 @@ export default {
   async asyncData({ $axios }) {
     try {
       let response = await $axios.$get('http://localhost:8080/api/products');
-      console.log(response);
       return {
         products: response.products
       }
     } catch (err) {
-      
+        console.log(err);
+    }
+  },
+  methods: {
+    async onDeleteProduct(id, index) {
+      try {
+        let response = await this.$axios.$delete(`http://localhost:8080/api/products/${id}`);
+        this.products.splice(index, 1);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 }
